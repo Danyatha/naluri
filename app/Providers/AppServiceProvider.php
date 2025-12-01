@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Blade::if('anyauth', function () {
+            return Auth::guard('web')->check() || Auth::guard('admin')->check();
+        });
+        Blade::directive('currentuser', function ($guard = 'web') {
+            return "<?php echo auth()->guard({$guard})->user(); ?>";
+        });
     }
 }

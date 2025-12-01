@@ -82,14 +82,14 @@
 
     <!-- Article Content -->
     <div class="article-content prose prose-lg max-w-none mb-12">
-        @foreach($story['content'] as $index => $paragraph)
+        @foreach(is_array($story['content']) ? $story['content'] : preg_split('/\r\n|\r|\n+/', $story['content']) as $index => $paragraph)
         <p class="text-gray-700 leading-relaxed mb-6 text-lg {{ $index === 0 ? 'drop-cap' : '' }}">
             {{ $paragraph }}
         </p>
         @endforeach
     </div>
 
-    <!-- Moral Section -->
+    <!-- closing Section -->
     <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border-l-4 border-blue-600 rounded-2xl p-8 md:p-10 mb-12 shadow-sm">
         <div class="flex items-start gap-4">
             <div class="flex-shrink-0 w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
@@ -98,9 +98,9 @@
                 </svg>
             </div>
             <div class="flex-1">
-                <h3 class="text-2xl font-bold text-gray-900 mb-3">Pesan Moral</h3>
+                <h3 class="text-2xl font-bold text-gray-900 mb-3">Closing Statement</h3>
                 <p class="text-gray-700 text-lg leading-relaxed italic">
-                    {{ $story['moral'] }}
+                    {{ $story['closing'] }}
                 </p>
             </div>
         </div>

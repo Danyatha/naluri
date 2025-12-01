@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->text('excerpt');
             $table->longText('content');
-            $table->string('moral')->nullable();
+            $table->string('closing')->nullable();
             $table->string('views')->nullable();
             $table->string('reading_time')->nullable();
             $table->timestamps();

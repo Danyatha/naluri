@@ -441,28 +441,47 @@
                     class="product-card group relative bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl border border-gray-100 hover:border-blue-200">
 
                     <!-- Image Container -->
-                    <div class="product-image relative aspect-square bg-gradient-to-br from-gray-50 to-gray-100">
-                        <!-- Placeholder -->
+                    <div class="product-image relative aspect-square bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+
+                        @php
+                        $image = $p->images->first();
+                        @endphp
+
+                        {{-- IMAGE --}}
+                        @if($image)
+                        <img
+                            src="{{ $image->url }}"
+                            alt="{{ $p->name }}"
+                            class="absolute inset-0 w-full h-full object-cover">
+                        @else
+                        {{-- Placeholder --}}
                         <div class="absolute inset-0 flex items-center justify-center">
-                            <svg class="w-16 h-16 text-gray-300 group-hover:text-gray-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            <svg class="w-16 h-16 text-gray-300 group-hover:text-gray-400 transition-colors"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                         </div>
+                        @endif
 
-                        <!-- Category Badge -->
+                        {{-- Category Badge --}}
                         @if($p->category)
                         <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-gray-700 shadow-sm">
                             {{ $p->category->name }}
                         </div>
                         @endif
 
-                        <!-- New Badge -->
+                        {{-- New Badge --}}
                         @if($p->created_at && $p->created_at->diffInDays(now()) < 7)
-                            <div class="badge-new absolute top-3 right-3 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-sm">
+                            <div class="absolute top-3 right-3 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-sm">
                             Baru
                     </div>
                     @endif
-            </div> {{-- TUTUP IMAGE CONTAINER --}}
+
+            </div>
+
 
             <!-- Product Info -->
             <div class="p-5">

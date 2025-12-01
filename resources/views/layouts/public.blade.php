@@ -36,13 +36,32 @@
                         Artikel
                         <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
                     </a>
-                    @auth
+                    @php
+                    $isAdmin = Auth::guard('admin')->check();
+                    $isUser = Auth::guard('web')->check();
+
+                    $currentUser = $isAdmin ? Auth::guard('admin')->user() : ($isUser ? Auth::guard('web')->user() : null);
+                    @endphp
+
+                    @if($currentUser)
+                    @if($isAdmin)
+                    <a href="{{ route('admin.dashboard') }}" class="hover:text-blue-600 transition-colors relative group">
+                        Dashboard
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
+                    </a>
+                    @else
+                    <a href="{{ route('dashboard') }}" class="hover:text-blue-600 transition-colors relative group">
+                        Dashboard
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
+                    </a>
+                    @endif
                     <!-- Settings Dropdown -->
                     <div class="relative" x-data="{ openDropdown: false }">
-                        <button @click="openDropdown = !openDropdown" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors">
-                            <span>{{ Auth::user()->name }}</span>
+                        <button @click="openDropdown = !openDropdown"
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                            <span>{{ $currentUser->name }}</span>
                             <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a 1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                             </svg>
                         </button>
 
@@ -58,13 +77,22 @@
                             class="absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5"
                             style="display: none;">
                             <div class="py-1">
+
+                                @if($isAdmin)
+                                <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    Admin Dashboard
+                                </a>
+                                @else
                                 <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     Dashboard
                                 </a>
+                                @endif
+
                                 <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     Profile
                                 </a>
-                                <form method="POST" action="{{ route('logout') }}">
+
+                                <form method="POST" action="{{ $isAdmin ? route('logout') : route('logout') }}">
                                     @csrf
                                     <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                         Log Out
@@ -73,18 +101,21 @@
                             </div>
                         </div>
                     </div>
+
                     @else
                     <!-- Guest Links -->
                     <a href="{{ route('login') }}" class="hover:text-blue-600 transition-colors relative group">
                         Login
                         <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
                     </a>
+
                     @if (Route::has('register'))
                     <a href="{{ route('register') }}" class="inline-block px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
                         Register
                     </a>
                     @endif
-                    @endauth
+                    @endif
+
                 </div>
 
                 <!-- Mobile menu button -->
